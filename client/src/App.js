@@ -80,6 +80,23 @@ export default class App extends Component {
         email: this.state.email,
         pincode: this.state.pincode,
       });
+      this.setState({
+        name: "",
+        age: "",
+        email: "",
+        pincode: "",
+        toasts: [
+          ...this.state.toasts,
+          {
+            id: 1,
+            title: "You will be notified soon!",
+            color: "success",
+            iconType: "cheer",
+            text:
+              "Register for another user or visit https://selfregistration.cowin.gov.in/ for more information.",
+          },
+        ],
+      });
     }
   };
 
