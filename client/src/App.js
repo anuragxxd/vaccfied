@@ -93,6 +93,19 @@ export default class App extends Component {
         <EuiPanel style={{ margin: "15px", marginTop: "30px" }}>
           <EuiText size="m" style={{ margin: "15px" }}>
             <h1 style={{ textAlign: "center", color: "#7DDED8" }}>Vaccfied</h1>
+            <h3 style={{ float: "right", marginTop: "-48px" }}>
+              <EuiIcon
+                type="invert"
+                size="xl"
+                onClick={() => {
+                  localStorage.setItem(
+                    "theme",
+                    localStorage.getItem("theme") === "dark" ? "light" : "dark"
+                  );
+                  window.location.reload();
+                }}
+              ></EuiIcon>
+            </h3>
           </EuiText>
           <EuiText textAlign="center" size="m" style={{ margin: "15px" }}>
             <h6>
