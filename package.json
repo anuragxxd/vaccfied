@@ -7,7 +7,8 @@
     "start": "node server.js",
     "server": "env-cmd -f ./config/dev.env nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "env-cmd -f ./config/dev.env concurrently \"npm run server\" \"npm run client\""
+    "dev": "env-cmd -f ./config/dev.env concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
