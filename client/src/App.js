@@ -47,8 +47,6 @@ export default class App extends Component {
   };
 
   handleSubmit = async () => {
-    let test = await axios.get("/");
-    console.log(test.data);
     let errors = [];
     if (this.state.name === "") {
       errors.push(<div>Name field is required!</div>);
@@ -100,7 +98,7 @@ export default class App extends Component {
             <h6>
               Need help finding the slots for vaccination in{" "}
               <span style={{ color: "#7DDED8" }}>India</span>? Get Notified as soon the vaccine
-              slots are avaliable at your location.
+              slots are avaliable at your location in next 7 days.
             </h6>
           </EuiText>
         </EuiPanel>
