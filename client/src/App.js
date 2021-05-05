@@ -190,6 +190,7 @@ export default class App extends Component {
                 )}
               </EuiButton>
             </EuiFormRow> */}
+            <EuiSpacer size="xxl"></EuiSpacer>
             <EuiBottomBar
               style={{
                 color: "black",
