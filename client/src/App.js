@@ -105,16 +105,18 @@ export default class App extends Component {
         <EuiHorizontalRule margin="xxl" size="half" />
         <EuiPanel style={{ margin: "15px" }}>
           <EuiForm>
-            <EuiFormRow label="Name">
+            <EuiFormRow label="Name" fullWidth>
               <EuiFieldText
+                fullWidth
                 prepend={<EuiIcon type="user" />}
                 placeholder="Enter your Name"
                 value={this.state.name}
                 onChange={(e) => this.setState({ name: e.target.value })}
               />
             </EuiFormRow>
-            <EuiFormRow label="Email">
+            <EuiFormRow label="Email" fullWidth>
               <EuiFieldText
+                fullWidth
                 prepend={<EuiIcon type="email" />}
                 placeholder="Enter your Email"
                 value={this.state.email}
@@ -122,8 +124,9 @@ export default class App extends Component {
                 onChange={(e) => this.setState({ email: e.target.value })}
               />
             </EuiFormRow>
-            <EuiFormRow label="Age">
+            <EuiFormRow label="Age" fullWidth>
               <EuiFieldNumber
+                fullWidth
                 prepend={<EuiIcon type="calendar" />}
                 placeholder="Enter your Age"
                 value={this.state.age}
@@ -132,8 +135,9 @@ export default class App extends Component {
               />
             </EuiFormRow>
             <EuiHorizontalRule size="quarter" margin="m"></EuiHorizontalRule>
-            <EuiFormRow label="Pincode">
+            <EuiFormRow label="Pincode" fullWidth>
               <EuiFieldText
+                fullWidth
                 prepend={<EuiIcon type="mapMarker" />}
                 placeholder="Enter your Pincode"
                 value={this.state.pincode}
