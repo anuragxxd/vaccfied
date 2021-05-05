@@ -25,7 +25,9 @@ const UserSchema = new mongoose.Schema(
     },
     pincode: {
       type: Number,
-      required: true,
+    },
+    district: {
+      type: Number,
     },
     served: {
       type: Boolean,

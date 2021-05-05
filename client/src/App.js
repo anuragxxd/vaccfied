@@ -15,6 +15,7 @@ import {
   EuiFieldNumber,
   EuiLoadingSpinner,
   EuiButton,
+  EuiSelect,
   EuiGlobalToastList,
 } from "@elastic/eui";
 import axios from "axios";
@@ -32,6 +33,19 @@ export default class App extends Component {
     age: "",
     loader: false,
     toasts: [],
+    isPincode: true,
+    states: [],
+    stateValue: "",
+    districts: [{ value: "Select State..", text: "Select State.." }],
+    districtValue: "Select State..",
+  };
+
+  componentDidMount = async () => {
+    const res = await axios.get("https://cdn-api.co-vin.in/api/v2/admin/location/states");
+    const states = res.data.states.map((state) => {
+      return { value: state.state_id, text: state.state_name };
+    });
+    this.setState({ states, stateValue: states[0].value });
   };
 
   handleLocation = async () => {
@@ -43,7 +57,6 @@ export default class App extends Component {
       console.log(position);
       // position.coords.latitude, position.coords.longitude
     });
-    this.setState({ loader: false });
   };
 
   handleSubmit = async () => {
@@ -57,8 +70,14 @@ export default class App extends Component {
     if (this.state.age === "") {
       errors.push(<div>Age field is required!</div>);
     }
-    if (this.state.pincode === "") {
-      errors.push(<div>Pincode field is required!</div>);
+    if (this.state.isPincode) {
+      if (this.state.pincode === "") {
+        errors.push(<div>Pincode field is required!</div>);
+      }
+    } else {
+      if (this.state.districtValue === "") {
+        errors.push(<div>District field is required!</div>);
+      }
     }
     if (errors.length > 0) {
       this.setState({
@@ -74,30 +93,72 @@ export default class App extends Component {
         ],
       });
     } else {
-      await axios.post("api/users", {
-        name: this.state.name,
-        age: this.state.age,
-        email: this.state.email,
-        pincode: this.state.pincode,
-      });
-      this.setState({
-        name: "",
-        age: "",
-        email: "",
-        pincode: "",
-        toasts: [
-          ...this.state.toasts,
-          {
-            id: 1,
-            title: "You will be notified soon!",
-            color: "success",
-            iconType: "cheer",
-            text:
-              "Register for another user or visit https://selfregistration.cowin.gov.in/ for more information.",
-          },
-        ],
-      });
+      let res;
+      if (this.state.isPincode) {
+        res = await axios.post("api/users", {
+          name: this.state.name,
+          age: this.state.age,
+          email: this.state.email,
+          pincode: this.state.pincode,
+        });
+      } else {
+        res = await axios.post("api/users/district", {
+          name: this.state.name,
+          age: this.state.age,
+          email: this.state.email,
+          district: this.state.districtValue,
+        });
+      }
+      console.log(res.status);
+      if (res.status === 201) {
+        this.setState({
+          name: "",
+          age: "",
+          email: "",
+          pincode: "",
+          toasts: [
+            ...this.state.toasts,
+            {
+              id: 1,
+              title: "You will be notified soon!",
+              color: "success",
+              iconType: "cheer",
+              text:
+                "Register for another user or visit https://selfregistration.cowin.gov.in/ for more information.",
+            },
+          ],
+        });
+      } else {
+        this.setState({
+          toasts: [
+            ...this.state.toasts,
+            {
+              id: 1,
+              title: "Oops, there was an error",
+              color: "danger",
+              iconType: "help",
+              text: "It's us not you!",
+            },
+          ],
+        });
+      }
     }
+  };
+
+  handleChangeState = async (e) => {
+    this.setState({
+      stateValue: e.target.value,
+      loader: true,
+      districts: [{ value: "Loading...", text: "Loading..." }],
+    });
+    this.setState({ districtValue: "Loading..." });
+    const res = await axios.get(
+      `https://cdn-api.co-vin.in/api/v2/admin/location/districts/${e.target.value}`
+    );
+    const districts = res.data.districts.map((district) => {
+      return { value: district.district_id, text: district.district_name };
+    });
+    this.setState({ districts, districtValue: districts[0].district_id, loader: false });
   };
 
   removeToast = (removedToast) => {
@@ -165,15 +226,45 @@ export default class App extends Component {
               />
             </EuiFormRow>
             <EuiHorizontalRule size="quarter" margin="m"></EuiHorizontalRule>
-            <EuiFormRow label="Pincode" fullWidth>
-              <EuiFieldText
+            <EuiFormRow fullWidth>
+              <EuiSwitch
+                checked={this.state.isPincode}
+                onChange={() => this.setState({ isPincode: !this.state.isPincode })}
+                label={this.state.isPincode ? "Pincode" : "Location"}
                 fullWidth
-                prepend={<EuiIcon type="mapMarker" />}
-                placeholder="Enter your Pincode"
-                value={this.state.pincode}
-                onChange={(e) => this.setState({ pincode: e.target.value })}
-              />
+              ></EuiSwitch>
             </EuiFormRow>
+            {this.state.isPincode ? (
+              <EuiFormRow label="Pincode" fullWidth>
+                <EuiFieldText
+                  fullWidth
+                  prepend={<EuiIcon type="mapMarker" />}
+                  placeholder="Enter your Pincode"
+                  value={this.state.pincode}
+                  onChange={(e) => this.setState({ pincode: e.target.value })}
+                />
+              </EuiFormRow>
+            ) : (
+              <>
+                <EuiFormRow label="State" fullWidth>
+                  <EuiSelect
+                    fullWidth
+                    options={this.state.states}
+                    value={this.state.stateValue}
+                    onChange={(e) => this.handleChangeState(e)}
+                  />
+                </EuiFormRow>
+                <EuiFormRow label="District" fullWidth>
+                  <EuiSelect
+                    fullWidth
+                    options={this.state.districts}
+                    value={this.state.districtValue}
+                    onChange={(e) => this.setState({ districtValue: e.target.value })}
+                  />
+                </EuiFormRow>
+              </>
+            )}
+
             {/* <EuiFormRow>
               <EuiText textAlign="center" size="s">
                 <h6>or</h6>

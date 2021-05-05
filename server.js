@@ -25,17 +25,23 @@ if (process.env.NODE_ENV === "production") {
 }
 
 let calendarByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin";
+let calendarByDis =
+  "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
 
 const job = schedule.scheduleJob("*/1 * * * *", async () => {
   const users = await User.find({ served: false }).lean();
-  console.log(users);
   let timeElapsed = Date.now();
   let today = new Date(timeElapsed);
   today = today.toLocaleDateString();
   for (let index = 0; index < users.length; index++) {
     const user = users[index];
     let sessionsFound = [];
-    let res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`);
+    let res;
+    if (user.pincode) {
+      res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`);
+    } else {
+      res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`);
+    }
     for (let i = 0; i < res.data.centers.length; i++) {
       const center = res.data.centers[i];
       for (let j = 0; j < center.sessions.length; j++) {
@@ -45,7 +51,6 @@ const job = schedule.scheduleJob("*/1 * * * *", async () => {
         }
       }
     }
-    console.log(user, sessionsFound);
     if (sessionsFound.length > 0) {
       let email = gotSlots(user, sessionsFound);
       if (email.success) {
