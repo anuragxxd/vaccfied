@@ -18,11 +18,11 @@ import {
   EuiGlobalToastList,
 } from "@elastic/eui";
 import axios from "axios";
-if (localStorage.getItem("theme") === "dark") {
-  require("@elastic/eui/dist/eui_theme_amsterdam_dark.css");
-} else {
-  require("@elastic/eui/dist/eui_theme_amsterdam_light.css");
-}
+// if (localStorage.getItem("theme") === "dark") {
+require("@elastic/eui/dist/eui_theme_amsterdam_dark.css");
+// } else {
+// require("@elastic/eui/dist/eui_theme_amsterdam_light.css");
+// }
 
 export default class App extends Component {
   state = {
@@ -93,7 +93,7 @@ export default class App extends Component {
         <EuiPanel style={{ margin: "15px", marginTop: "30px" }}>
           <EuiText size="m" style={{ margin: "15px" }}>
             <h1 style={{ textAlign: "center", color: "#7DDED8" }}>Vaccfied</h1>
-            <h3 style={{ float: "right", marginTop: "-48px" }}>
+            {/* <h3 style={{ float: "right", marginTop: "-48px" }}>
               <EuiIcon
                 type="invert"
                 size="xl"
@@ -105,7 +105,7 @@ export default class App extends Component {
                   window.location.reload();
                 }}
               ></EuiIcon>
-            </h3>
+            </h3> */}
           </EuiText>
           <EuiText textAlign="center" size="m" style={{ margin: "15px" }}>
             <h6>
