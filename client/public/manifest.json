@@ -3,7 +3,7 @@
   "name": "App to Track the vaccine slots",
   "icons": [
     {
-      "src": "logo.jpg",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "192x192"
     }
