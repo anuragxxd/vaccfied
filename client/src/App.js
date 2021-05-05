@@ -38,6 +38,7 @@ export default class App extends Component {
     stateValue: "",
     districts: [{ value: "Select State..", text: "Select State.." }],
     districtValue: "Select State..",
+    phoneno: "",
   };
 
   componentDidMount = async () => {
@@ -100,6 +101,7 @@ export default class App extends Component {
           age: this.state.age,
           email: this.state.email,
           pincode: this.state.pincode,
+          phoneno: this.state.phoneno,
         });
       } else {
         res = await axios.post("api/users/district", {
@@ -107,6 +109,7 @@ export default class App extends Component {
           age: this.state.age,
           email: this.state.email,
           district: this.state.districtValue,
+          phoneno: this.state.phoneno,
         });
       }
       console.log(res.status);
@@ -213,6 +216,16 @@ export default class App extends Component {
                 value={this.state.email}
                 type="email"
                 onChange={(e) => this.setState({ email: e.target.value })}
+              />
+            </EuiFormRow>
+            <EuiFormRow label="Mobile Number" fullWidth>
+              <EuiFieldText
+                fullWidth
+                prepend="+91"
+                placeholder="Enter your Mobile Number"
+                value={this.state.phoneno}
+                type="number"
+                onChange={(e) => this.setState({ phoneno: e.target.value })}
               />
             </EuiFormRow>
             <EuiFormRow label="Age" fullWidth>

@@ -6,6 +6,7 @@ const User = require("./src/models/user");
 const userRouter = require("./src/routes/user");
 const { default: axios } = require("axios");
 const { gotSlots } = require("./src/email/gotSlots");
+const client = require("twilio")(process.env.TWILIO_AUTHSID, process.env.TWILIO_AUTHTOKEN);
 
 require("./src/db/mongoose");
 
@@ -38,9 +39,19 @@ const job = schedule.scheduleJob("*/1 * * * *", async () => {
     let sessionsFound = [];
     let res;
     if (user.pincode) {
-      res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`);
+      res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
+        },
+      });
     } else {
-      res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`);
+      res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
+        },
+      });
     }
     for (let i = 0; i < res.data.centers.length; i++) {
       const center = res.data.centers[i];
@@ -53,6 +64,20 @@ const job = schedule.scheduleJob("*/1 * * * *", async () => {
     }
     if (sessionsFound.length > 0) {
       let email = gotSlots(user, sessionsFound);
+      client.messages
+        .create({
+          body: `Hello ${
+            user.name
+          },\nhttp://vaccfied.me found out some slots for you to get vaccinated. \n\n${sessionsFound.map(
+            ({ center, session }) => {
+              return `Date/Time: ${session.date}/${center.from}-${center.to}\nName: ${center.name}, ${center.address},${center.district_name}, ${center.state_name} - ${center.pincode}\nVaccine Name: ${session.vaccine}\nAge Limit: Min ${session.min_age_limit}\n\n`;
+            }
+          )}Hurry, visit https://selfregistration.cowin.gov.in/ to registed they are filling fast. \n\nTill then stay safe!\nFrom Vaccfied!`,
+          from: "whatsapp:+14155238886",
+          to: `whatsapp:+91${user.phoneno}`,
+        })
+        .then((message) => console.log(message.sid))
+        .done();
       if (email.success) {
         await User.findByIdAndUpdate(user._id, { served: true });
       }

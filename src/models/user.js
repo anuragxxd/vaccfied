@@ -29,6 +29,9 @@ const UserSchema = new mongoose.Schema(
     district: {
       type: Number,
     },
+    phoneno: {
+      type: Number,
+    },
     served: {
       type: Boolean,
       require: true,
