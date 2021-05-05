@@ -40,19 +40,9 @@ const job = schedule.scheduleJob("*/1 * * * *", async () => {
       let sessionsFound = [];
       let res;
       if (user.pincode) {
-        res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`, {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Mobile Safari/537.36",
-          },
-        });
+        res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`);
       } else {
-        res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`, {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Mobile Safari/537.36",
-          },
-        });
+        res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`);
       }
       for (let i = 0; i < res.data.centers.length; i++) {
         const center = res.data.centers[i];
