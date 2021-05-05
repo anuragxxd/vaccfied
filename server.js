@@ -9,6 +9,10 @@ require("./src/db/mongoose");
 app.use(express.json());
 app.use(userRouter);
 
+app.use("/", (req, res) => {
+  res.send({ hello: "hello" });
+});
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 

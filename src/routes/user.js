@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const express = require("express");
+const router = new express.Router();
 
 router.post("/api/users", async (req, res) => {
   try {
@@ -8,7 +10,7 @@ router.post("/api/users", async (req, res) => {
       age: req.body.age,
       pincode: req.body.pincode,
     });
-    user.save();
+    await user.save();
     res.status(201).send();
   } catch (e) {
     res.status(403).send({ error: e });

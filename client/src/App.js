@@ -5,14 +5,9 @@ import {
   EuiSpacer,
   EuiCard,
   EuiIcon,
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiButtonIcon,
   EuiHorizontalRule,
-  EuiButtonGroup,
   EuiPanel,
   EuiBottomBar,
-  EuiConfirmModal,
   EuiForm,
   EuiFormRow,
   EuiFieldText,
@@ -20,7 +15,9 @@ import {
   EuiFieldNumber,
   EuiLoadingSpinner,
   EuiButton,
+  EuiGlobalToastList,
 } from "@elastic/eui";
+import axios from "axios";
 if (localStorage.getItem("theme") === "dark") {
   require("@elastic/eui/dist/eui_theme_amsterdam_dark.css");
 } else {
@@ -34,6 +31,7 @@ export default class App extends Component {
     pincode: "",
     age: "",
     loader: false,
+    toasts: [],
   };
 
   handleLocation = async () => {
@@ -46,6 +44,49 @@ export default class App extends Component {
       // position.coords.latitude, position.coords.longitude
     });
     this.setState({ loader: false });
+  };
+
+  handleSubmit = async () => {
+    let test = await axios.get("/");
+    console.log(test.data);
+    let errors = [];
+    if (this.state.name === "") {
+      errors.push(<div>Name field is required!</div>);
+    }
+    if (this.state.email === "") {
+      errors.push(<div>Email field is required!</div>);
+    }
+    if (this.state.age === "") {
+      errors.push(<div>Age field is required!</div>);
+    }
+    if (this.state.pincode === "") {
+      errors.push(<div>Pincode field is required!</div>);
+    }
+    if (errors.length > 0) {
+      this.setState({
+        toasts: [
+          ...this.state.toasts,
+          {
+            id: 1,
+            title: "Oops, there was an error",
+            color: "danger",
+            iconType: "help",
+            text: errors.map((error) => error),
+          },
+        ],
+      });
+    } else {
+      await axios.post("api/users", {
+        name: this.state.name,
+        age: this.state.age,
+        email: this.state.email,
+        pincode: this.state.pincode,
+      });
+    }
+  };
+
+  removeToast = (removedToast) => {
+    this.setState({ toasts: [] });
   };
 
   render() {
@@ -130,7 +171,7 @@ export default class App extends Component {
               <EuiText
                 textAlign="center"
                 onClick={() => {
-                  console.log("submit");
+                  this.handleSubmit();
                 }}
               >
                 <b>Submit</b>
@@ -138,6 +179,11 @@ export default class App extends Component {
             </EuiBottomBar>
           </EuiForm>
         </EuiPanel>
+        <EuiGlobalToastList
+          toasts={this.state.toasts}
+          dismissToast={this.removeToast}
+          toastLifeTimeMs={6000}
+        />
       </>
     );
   }
