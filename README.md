@@ -11,8 +11,8 @@ This app users the goverment provide API (https://apisetu.gov.in/public/api/cowi
 
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/58766532/117305754-b1707300-ae9c-11eb-8c7a-e1876202b2a8.png" width="500" />
-  <img src="https://user-images.githubusercontent.com/58766532/117305771-b503fa00-ae9c-11eb-95e7-ba10a47f5439.png" width="500" /> 
+  <img src="https://user-images.githubusercontent.com/58766532/117305754-b1707300-ae9c-11eb-8c7a-e1876202b2a8.png" width="400" />
+  <img src="https://user-images.githubusercontent.com/58766532/117305771-b503fa00-ae9c-11eb-95e7-ba10a47f5439.png" width="400" /> 
 </p>
 
 Visit App here http://vaccfied.me/
