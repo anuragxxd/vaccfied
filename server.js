@@ -29,7 +29,7 @@ let calendarByPin = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/publi
 let calendarByDis =
   "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict";
 
-const job = schedule.scheduleJob("*/1 * * * *", async () => {
+const job = schedule.scheduleJob("*/10 * * * * *", async () => {
   try {
     const users = await User.find({ served: false }).lean();
     let timeElapsed = Date.now();
@@ -40,10 +40,22 @@ const job = schedule.scheduleJob("*/1 * * * *", async () => {
       let sessionsFound = [];
       let res;
       if (user.pincode) {
-        res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`);
+        res = await axios.get(`${calendarByPin}?pincode=${user.pincode}&date=${today}`, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51",
+          },
+        });
       } else {
-        res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`);
+        res = await axios.get(`${calendarByDis}?district_id=${user.district}&date=${today}`, {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51",
+            CLIENT_IP: "192.23.23.122",
+          },
+        });
       }
+      console.log(res);
       for (let i = 0; i < res.data.centers.length; i++) {
         const center = res.data.centers[i];
         for (let j = 0; j < center.sessions.length; j++) {
