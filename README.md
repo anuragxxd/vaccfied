@@ -10,3 +10,5 @@ This app users the goverment provide API (https://apisetu.gov.in/public/api/cowi
 
 
 Visit App here http://vaccfied.me/
+
+Fun Fact:- Made this in 5hr. :)
