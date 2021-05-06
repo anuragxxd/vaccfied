@@ -44,6 +44,7 @@ const job = schedule.scheduleJob("*/10 * * * * *", async () => {
           headers: {
             "User-Agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51",
+            CLIENT_IP: "192.23.23.122",
           },
         });
       } else {
