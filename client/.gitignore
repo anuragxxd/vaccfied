@@ -1,9 +1,10 @@
 
 # dependencies
 /node_modules
-config
 /.pnp
 .pnp.js
+
+/config
 
 # testing
 /coverage
