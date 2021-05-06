@@ -4,11 +4,11 @@ As covid is surging in India only way to stop it is by vaccination. GOI portal f
 
 This app users the goverment provide API (https://apisetu.gov.in/public/api/cowin#/) for finding the slots and sending notifications. 
 
-Home Page
-![Screenshot 2021-05-06 at 6 48 36 PM](https://user-images.githubusercontent.com/58766532/117304716-acf78a80-ae9b-11eb-91c7-97b01816b947.png)
-
-Registering
-![Screenshot 2021-05-06 at 6 49 56 PM](https://user-images.githubusercontent.com/58766532/117304887-dca69280-ae9b-11eb-8040-680328465fd2.png)
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/58766532/117304716-acf78a80-ae9b-11eb-91c7-97b01816b947.png" width="100" />
+  <img src="https://user-images.githubusercontent.com/58766532/117304887-dca69280-ae9b-11eb-8040-680328465fd2.png" width="100" /> 
+  <img src="/img3.png" width="100" />
+</p>
 
 Whats App Message 
 WhatsApp Image 2021-05-06 at 18.53.38.jpeg![image](https://user-images.githubusercontent.com/58766532/117305754-b1707300-ae9c-11eb-8c7a-e1876202b2a8.png)
